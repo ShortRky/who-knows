@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - MINIMA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .product-card { transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .filter-active { background-color: #DC143C; color: white; }
+        .price-range-slider { -webkit-appearance: none; appearance: none; height: 4px; background: #e5e7eb; outline: none; }
+        .price-range-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; background: #DC143C; cursor: pointer; border-radius: 50%; }
+        .color-swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+        .color-swatch.active { border-color: #DC143C; }
+        .size-option { padding: 8px 12px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.2s; }
+        .size-option.active { background-color: #DC143C; color: white; border-color: #DC143C; }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold tracking-tight">MINIMA</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 transition-colors">Home</a>
+                    <a href="products.html" class="text-gray-900 font-medium border-b-2 border-red-500 pb-1">Products</a>
+                    <a href="about.html" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" id="search-input" placeholder="Search products..." class="w-64 px-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:border-red-500 transition-colors">
+                    </div>
+                    <button id="cart-btn" class="relative p-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9m-9 0h9"></path>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-16 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex gap-8">
+                <!-- Filters Sidebar -->
+                <div class="w-64 flex-shrink-0">
+                    <div class="sticky top-24">
+                        <h2 class="text-xl font-bold mb-6">Filters</h2>
+                        
+                        <!-- Categories -->
+                        <div class="mb-8">
+                            <h3 class="font-semibold mb-3">Categories</h3>
+                            <div class="space-y-2">
+                                <button class="filter-btn w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-category="all">All Products</button>
+                                <button class="filter-btn w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-category="shirts">Shirts</button>
+                                <button class="filter-btn w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-category="pants">Pants</button>
+                                <button class="filter-btn w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-category="outerwear">Outerwear</button>
+                            </div>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="mb-8">
+                            <h3 class="font-semibold mb-3">Price Range</h3>
+                            <div class="space-y-3">
+                                <input type="range" id="price-range" class="price-range-slider w-full" min="0" max="200" value="200">
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <span>$0</span>
+                                    <span id="price-value">$200</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colors -->
+                        <div class="mb-8">
+                            <h3 class="font-semibold mb-3">Colors</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="color-swatch bg-white border border-gray-300" data-color="white"></div>
+                                <div class="color-swatch bg-black" data-color="black"></div>
+                                <div class="color-swatch bg-gray-500" data-color="gray"></div>
+                                <div class="color-swatch bg-blue-600" data-color="blue"></div>
+                                <div class="color-swatch bg-red-600" data-color="red"></div>
+                                <div class="color-swatch bg-green-600" data-color="green"></div>
+                            </div>
+                        </div>
+
+                        <!-- Sizes -->
+                        <div class="mb-8">
+                            <h3 class="font-semibold mb-3">Sizes</h3>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="size-option text-center" data-size="XS">XS</div>
+                                <div class="size-option text-center" data-size="S">S</div>
+                                <div class="size-option text-center" data-size="M">M</div>
+                                <div class="size-option text-center" data-size="L">L</div>
+                                <div class="size-option text-center" data-size="XL">XL</div>
+                                <div class="size-option text-center" data-size="XXL">XXL</div>
+                            </div>
+                        </div>
+
+                        <!-- Sort -->
+                        <div class="mb-8">
+                            <h3 class="font-semibold mb-3">Sort By</h3>
+                            <select id="sort-select" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-red-500">
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="newest">Newest</option>
+                                <option value="rating">Highest Rated</option>
+                            </select>
+                        </div>
+
+                        <button id="clear-filters" class="w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                            Clear All Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="flex-1">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold">All Products</h1>
+                        <p class="text-gray-600"><span id="product-count">24</span> products</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="products-grid">
+                        <!-- Products will be loaded here by JavaScript -->
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="text-center mt-12">
+                        <button id="load-more" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-full font-medium hover:bg-gray-300 transition-colors">
+                            Load More Products
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Quick View Modal -->
+    <div id="quick-view-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold">Product Details</h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <img id="modal-image" src="" alt="" class="w-full h-auto rounded-lg">
+                    </div>
+                    <div class="space-y-4">
+                        <h4 id="modal-title" class="text-2xl font-bold"></h4>
+                        <p id="modal-price" class="text-3xl font-bold text-red-500"></p>
+                        <p id="modal-description" class="text-gray-600"></p>
+                        
+                        <div>
+                            <h5 class="font-semibold mb-2">Size</h5>
+                            <div class="flex gap-2">
+                                <button class="size-option px-4 py-2 border border-gray-300 rounded">S</button>
+                                <button class="size-option px-4 py-2 border border-gray-300 rounded">M</button>
+                                <button class="size-option px-4 py-2 border border-gray-300 rounded">L</button>
+                                <button class="size-option px-4 py-2 border border-gray-300 rounded">XL</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="font-semibold mb-2">Color</h5>
+                            <div class="flex gap-2">
+                                <div class="color-swatch bg-white border border-gray-300"></div>
+                                <div class="color-swatch bg-black"></div>
+                                <div class="color-swatch bg-gray-500"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="font-semibold mb-2">Quantity</h5>
+                            <div class="flex items-center gap-2">
+                                <button class="w-10 h-10 border border-gray-300 rounded hover:bg-gray-100">-</button>
+                                <span class="w-12 text-center">1</span>
+                                <button class="w-10 h-10 border border-gray-300 rounded hover:bg-gray-100">+</button>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-red-500 text-white py-3 rounded-full font-medium hover:bg-red-600 transition-colors">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold">Shopping Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="border-t border-gray-200 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-lg font-semibold">Total:</span>
+                <span id="cart-total" class="text-xl font-bold text-red-500">$0.00</span>
+            </div>
+            <a href="cart.html" class="w-full bg-red-500 text-white py-3 rounded-full font-medium hover:bg-red-600 transition-colors block text-center">
+                Checkout
+            </a>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
